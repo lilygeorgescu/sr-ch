@@ -19,7 +19,7 @@ def extract_patch_save_images(image, dim_patch, stride, resize_factor, folder_in
         for j in range(0, w - dim_patch, stride):
             idx_image = idx_image + 1
             gt_patch = image[i:i + dim_patch, j:j + dim_patch]
-            sigma = np.random.rand() * 0.5
+            sigma = np.random.rand()
             kernel = get_kernel(3, sigma)
 
             if np.random.rand() < 0.5:
@@ -37,7 +37,7 @@ def extract_patch_save_images(image, dim_patch, stride, resize_factor, folder_in
     return idx_image
 
 
-folder_name = 'D:\\disertatie\\materiale-radu\\raw-images'
+folder_name = '/home/igeorgescu/datasets/super_res/ch/train'
 files = os.listdir(folder_name)
 dim_patch = 14
 stride = 13
@@ -66,4 +66,4 @@ for file_name in files:
         image_full_path = os.path.join(src_folder, image_name)
         image = np.load(image_full_path)
         idx_image = extract_patch_save_images(image, dim_patch, stride, resize_factor, folder_in, folder_gt, idx_image)
-    exit()
+
