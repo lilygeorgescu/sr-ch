@@ -16,12 +16,13 @@ SHOW_IMAGES = False
 def my_psnr(img1, img2):
     img1 = np.float32(img1)
     img2 = np.float32(img2)
-    mse = np.mean( (img1 - img2) ** 2 )
+    mse = np.mean((img1 - img2) ** 2)
     if mse == 0:
         return 100
-    PIXEL_MAX = 255.0 
+    PIXEL_MAX = params.max_value
     return 20 * math.log10(PIXEL_MAX / math.sqrt(mse))
-    
+
+
 def psnr(img1, img2): 
     return my_psnr(img1, img2)
     img1 = np.uint8(img1)
@@ -29,10 +30,8 @@ def psnr(img1, img2):
     
     return psnr_sk(img1, img2)
     
-def ssim(img1, img2):  
-    img1 = np.uint8(img1)
-    img2 = np.uint8(img2)
-    if(img1.shape[2] == 1):
+def ssim(img1, img2):
+    if img1.shape[2] == 1:
         return ssim_sk(np.squeeze(img1), np.squeeze(img2))
     return ssim_sk(img1, img2)
     

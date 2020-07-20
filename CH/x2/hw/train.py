@@ -88,7 +88,7 @@ for epoch in range(start_epoch, params.num_epochs):
     ssim_epoch = 0
     psnr_epoch = 0
     for i in range(0, num_iterations):
-        input_, target_  = data_reader.get_next_batch_train(i, batch_size)
+        input_, target_ = data_reader.get_next_batch_train(i, batch_size)
         num_images += batch_size
         cost, _, predicted_images = sess.run([loss, opt, output], feed_dict={input: input_ , target: target_, starter_learning_rate: lr})
         print(predicted_images.min())
@@ -97,7 +97,7 @@ for epoch in range(start_epoch, params.num_epochs):
         # cv.imshow('p', predicted_images[0])
         # cv.imshow('target_', target_[0])
         # cv.waitKey(1)
-        ssim_batch, psnr_batch = utils.compute_ssim_psnr_batch(np.round(predicted_images), np.round(target_))
+        ssim_batch, psnr_batch = utils.compute_ssim_psnr_batch(np.round(predicted_images * params.max_value), np.round(target_ * params.max_value))
         ssim_epoch += ssim_batch
         psnr_epoch += psnr_batch
         print("Epoch/Iteration {}/{} ...".format(epoch, i), "Training loss: {:.4f}  ssim: {:.4f} psnr: {:.4f}".format(batch_loss/num_images, ssim_epoch/num_images, psnr_epoch/num_images), "Learning rate:  {:.8f}".format(lr))

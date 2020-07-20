@@ -1,8 +1,16 @@
-import os
-import numpy as np
 import cv2 as cv
-import pdb
+import numpy as np
 from scipy.signal import convolve
+import os
+
+OUTPUT_PATH = ''
+MIN_VALUE = -1100
+MAX_VALUE = 2500
+dim_patch = 14
+stride = 13
+resize_factor = 2
+input_folder_name = 'input_%d_%d' % (dim_patch, resize_factor)
+gt_folder_name = 'gt_%d_%d' % (dim_patch, resize_factor)
 
 
 def get_kernel(dim, sigma):
@@ -37,33 +45,10 @@ def extract_patch_save_images(image, dim_patch, stride, resize_factor, folder_in
     return idx_image
 
 
-folder_name = '/home/igeorgescu/datasets/super_res/ch/train'
-files = os.listdir(folder_name)
-dim_patch = 14
-stride = 13
-resize_factor = 2
-input_folder_name = 'input_%d_%d' % (dim_patch, resize_factor)
-gt_folder_name = 'gt_%d_%d' % (dim_patch, resize_factor)
-
-for file_name in files:
-    src_folder = os.path.join(folder_name, file_name, 'original')
-    images_names = os.listdir(src_folder)
-    folder_in = os.path.join(folder_name, file_name, input_folder_name)
-    folder_gt = os.path.join(folder_name, file_name, gt_folder_name)
-
-    if not os.path.isdir(folder_in):
-        os.mkdir(folder_in)
-
-    if not os.path.isdir(folder_gt):
-        os.mkdir(folder_gt)
-
-    idx_image = 0
-    print('%s' % file_name)
-    for image_name in images_names:
-        if os.path.isdir(os.path.join(src_folder, image_name)):
-            continue
-
-        image_full_path = os.path.join(src_folder, image_name)
-        image = np.load(image_full_path)
-        idx_image = extract_patch_save_images(image, dim_patch, stride, resize_factor, folder_in, folder_gt, idx_image)
-
+def process_image(image, is_ch=False):
+    image = np.float32(image)
+    image = np.clip(image, MIN_VALUE, MAX_VALUE)
+    if not is_ch:
+        image -= MIN_VALUE
+    image /= (MAX_VALUE - MIN_VALUE)
+    return image

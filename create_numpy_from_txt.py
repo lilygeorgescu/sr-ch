@@ -2,6 +2,7 @@ import numpy as np
 import os
 import pdb
 
+
 class DICOMObject:
     def __init__(self, DICOM_txt_file):
         DICOM_file = open(DICOM_txt_file, "r")

@@ -25,6 +25,7 @@ num_channels = 1
 tf_version = 1.02
 ckpt_name = 'model.ckpt'
 latest_ckpt_filename = 'latest_epoch_tested'
+max_value = 4096.0
 
 # for network architecture to be the same everywhere
 import networks as nets
