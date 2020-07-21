@@ -15,14 +15,14 @@ class DataReader:
         self.train_path = train_path
         self.SHOW_IMAGES = SHOW_IMAGES        
         if is_training:
-            self.train_images_in_names = utils.get_all_path_names_from_directory(train_path, 'input_%d_%d' % (
+            self.train_images_in = utils.read_all_patches_from_directory(train_path, 'input_%d_%d' % (
                 params.dim_patch, params.scale)) / params.max_value
 
-            self.train_images_gt_names = utils.get_all_path_names_from_directory(train_path, 'gt_%d_%d' % (
+            self.train_images_gt = utils.read_all_patches_from_directory(train_path, 'gt_%d_%d' % (
                 params.dim_patch, params.scale)) / params.max_value
-            self.train_images_in_names, self.train_images_gt_names = \
-                shuffle(self.train_images_in_names, self.train_images_gt_names)
-            self.num_train_images_names = len(self.train_images_in_names)
+            self.train_images_in, self.train_images_gt = \
+                shuffle(self.train_images_in, self.train_images_gt)
+            self.num_train_images_names = len(self.train_images_in)
             self.dim_patch_in = params.dim_patch // params.scale
             self.dim_patch_gt = params.dim_patch
             self.index_train = 0 
@@ -44,14 +44,14 @@ class DataReader:
         if iteration == 0:  # because we use only full batch
             self.index_train = 0
             end = batch_size 
-            self.train_images_in_names, self.train_images_gt_names = \
-                shuffle(self.train_images_in_names, self.train_images_gt_names)
+            self.train_images_in, self.train_images_gt = \
+                shuffle(self.train_images_in, self.train_images_gt)
         input_images = np.zeros((batch_size, self.dim_patch_in, self.dim_patch_in, params.num_channels))
         output_images = np.zeros((batch_size, self.dim_patch_gt, self.dim_patch_gt, params.num_channels))
         start = self.index_train
         for idx in range(start, end): 
-            image_in = np.load(self.train_images_in_names[idx])
-            image_gt = np.load(self.train_images_gt_names[idx])
+            image_in = self.train_images_in[idx]
+            image_gt = self.train_images_gt[idx]
             # augmentation
             idx_degree = random.randint(0, len(self.rotation_degrees) - 1) 
             image_in = utils.rotate(image_in, self.rotation_degrees[idx_degree])
@@ -66,5 +66,3 @@ class DataReader:
         
         self.index_train = end
         return input_images, output_images
- 
-        

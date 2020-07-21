@@ -249,21 +249,14 @@ def read_all_patches_from_directory(base_dir, folder='', return_np_array=True):
         num_images = len(files)
         print('There are {} images in {}'.format(num_images, images_path))
         # read the first image to get the size of the images
-        image =  np.load(files[0])
 
-        print('The size of the first image is {}'.format(image.shape))
-        
-        images.append(np.expand_dims(image, 2))
-        for index in range(1, num_images): 
+        for index in range(0, num_images):
             image = np.load(files[index])
-            images.append(np.expand_dims(image, 2))
-            if SHOW_IMAGES:
-                cv.imshow('image', image)
-                cv.waitKey(0) 
+            images.append(np.expand_dims(image, 3)) 
                 
     if not return_np_array:
         return images
-        
+    pdb.set_trace()
     return np.array(images)
 
 
