@@ -3,7 +3,7 @@ import numpy as np
 from scipy.signal import convolve
 import os
 
-OUTPUT_PATH = ''
+OUTPUT_PATH = '/media/usb/igeorgescu/super-resolution/ct_train'
 MIN_VALUE = -1100
 MAX_VALUE = 2500
 dim_patch = 14

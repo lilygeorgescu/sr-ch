@@ -7,7 +7,7 @@ import nrrd
 from utils import *
 
 
-folder_name = 'C:\\Research\\SR\\tcia-ct-scan-dataset\\train'
+folder_name = '/home/igeorgescu/datasets/super_res/tcia-ct-scan-dataset/train'
 files = os.listdir(folder_name)
 
 
