@@ -5,18 +5,29 @@ import random
 import math
 from sklearn.utils import shuffle
 import pdb
+import os
 import re
 import data_reader as reader
 
 import networks as nets
 import utils
 import params
+import sys
+operating_system = sys.platform
+
+os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
+
+if operating_system.find("win") == -1:
+    os.environ["CUDA_VISIBLE_DEVICES"] = "1"
+else:
+    os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+
 
 SHOW_IMAGES = False 
 IS_RESTORE = tf.train.latest_checkpoint(params.folder_data) is not None
  
 params.show_params()   
-data_reader = reader.DataReader('./data/train', './data/validation', './data/test')
+data_reader = reader.DataReader('/media/usb/igeorgescu/super-resolution/ct_train', './data/validation', './data/test')
 
 # training 
 batch_size = 128
@@ -97,7 +108,7 @@ for epoch in range(start_epoch, params.num_epochs):
         # cv.imshow('p', predicted_images[0])
         # cv.imshow('target_', target_[0])
         # cv.waitKey(1)
-        ssim_batch, psnr_batch = utils.compute_ssim_psnr_batch(np.round(predicted_images * params.max_value), np.round(target_ * params.max_value))
+        ssim_batch, psnr_batch = utils.compute_ssim_psnr_batch(np.round(predicted_images * params.MAX_INTERVAL), np.round(target_ * params.MAX_INTERVAL))
         ssim_epoch += ssim_batch
         psnr_epoch += psnr_batch
         print("Epoch/Iteration {}/{} ...".format(epoch, i), "Training loss: {:.4f}  ssim: {:.4f} psnr: {:.4f}".format(batch_loss/num_images, ssim_epoch/num_images, psnr_epoch/num_images), "Learning rate:  {:.8f}".format(lr))
