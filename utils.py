@@ -22,10 +22,11 @@ def get_kernel(dim, sigma):
 
 def extract_patch_save_images(image, dim_patch, stride, resize_factor, folder_in, folder_gt, idx_image):
     h, w = image.shape
-
+    images_in = []
+    images_gt = []
+    idx_image = idx_image + 1
     for i in range(0, h - dim_patch, stride):
         for j in range(0, w - dim_patch, stride):
-            idx_image = idx_image + 1
             gt_patch = image[i:i + dim_patch, j:j + dim_patch]
             sigma = np.random.rand()
             kernel = get_kernel(3, sigma)
@@ -39,8 +40,11 @@ def extract_patch_save_images(image, dim_patch, stride, resize_factor, folder_in
             if np.sum(in_patch) == 0:
                 continue
 
-            np.save(os.path.join(folder_gt, '%05d.npy' % idx_image), gt_patch)
-            np.save(os.path.join(folder_in, '%05d.npy' % idx_image), in_patch)
+            images_in.append(in_patch)
+            images_gt.append(gt_patch)
+
+    np.save(os.path.join(folder_gt, '%05d.npy' % idx_image), np.array(images_gt))
+    np.save(os.path.join(folder_in, '%05d.npy' % idx_image), np.array(images_in))
 
     return idx_image
 
