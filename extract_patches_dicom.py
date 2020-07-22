@@ -7,7 +7,7 @@ import pydicom
 
 from utils import *
 
-folder_name = 'C:\\Research\\SR\\kaggle-brain-hem'
+folder_name = '/home/igeorgescu/datasets/super_res/kaggle_images'
 files = os.listdir(folder_name)
 
 for file_name in files:

@@ -6,7 +6,7 @@ import nrrd
 
 from utils import *
 
-folder_name = 'D:\\disertatie\\materiale-radu\\raw-images\\train'
+folder_name = '/home/igeorgescu/datasets/super_res/ch/train'
 files = os.listdir(folder_name)
 
 for file_name in files:
