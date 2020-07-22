@@ -259,7 +259,7 @@ def read_all_patches_from_directory(base_dir, folder='', return_np_array=True):
                 images = image
             else:
                 images = np.concatenate((images, image), axis=0)
- 
+
     return images
 
 
@@ -397,7 +397,7 @@ def rotate_images(images, angle):
 
 
 def process_image(image, is_ch=False):
-    image = np.float64(image)
+    image = np.float32(image)
     image = np.clip(image, params.MIN_VALUE, params.MAX_VALUE)
     if not is_ch:
         image -= params.MIN_VALUE
@@ -405,7 +405,7 @@ def process_image(image, is_ch=False):
     return image
 
 def process_image_gt(image, is_ch=False):
-    image = np.float64(image)
+    image = np.float32(image)
     image = np.clip(image, params.MIN_VALUE, params.MAX_VALUE)
     if not is_ch:
         image -= params.MIN_VALUE

@@ -69,3 +69,4 @@ for interpolation_method in interpolation_methods.keys():
 # epoch 3 cnn D:\Research\super-resolution\datasets\test --- psnr = 48.15208423993577 ssim = 0.7314415282172549
 # epoch 4 cnn D:\Research\super-resolution\datasets\test --- psnr = 48.663724668959446 ssim = 0.7483125980771304
 # epoch 7 cnn D:\Research\super-resolution\datasets\test --- psnr = 48.6509703921561 ssim = 0.7494254511269222
+# epoch 8 cnn D:\Research\super-resolution\datasets\test --- psnr = 48.88591108143797 ssim = 0.7423979462190043
