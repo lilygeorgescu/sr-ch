@@ -242,7 +242,7 @@ def read_all_patches_from_directory(base_dir, folder='', return_np_array=True):
     if not os.path.exists(base_dir):
         print('Error!! Folder base name does not exit')
         
-    images = [] 
+    images = None 
     folder_names = os.listdir(base_dir)
     for folder_name in folder_names:      
         
@@ -254,12 +254,13 @@ def read_all_patches_from_directory(base_dir, folder='', return_np_array=True):
 
         for index in range(0, num_images):
             image = np.load(files[index])
-            images.append(np.expand_dims(image, 3))
-                
-    if not return_np_array:
-        return images
-    pdb.set_trace()
-    return np.array(images)
+            image = np.expand_dims(image, 3)
+            if images is None:
+                images = image
+            else:
+                images = np.concatenate((images, image), axis=0)
+ 
+    return images
 
 
 def get_all_path_names_from_directory(base_dir, folder='', return_np_array=True):

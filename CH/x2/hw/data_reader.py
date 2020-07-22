@@ -16,13 +16,13 @@ class DataReader:
         self.SHOW_IMAGES = SHOW_IMAGES        
         if is_training:
             self.train_images_in = utils.read_all_patches_from_directory(train_path, 'input_%d_%d' % (
-                params.dim_patch, params.scale)) / params.max_value
+                params.dim_patch, params.scale))
 
             self.train_images_gt = utils.read_all_patches_from_directory(train_path, 'gt_%d_%d' % (
-                params.dim_patch, params.scale)) / params.max_value
+                params.dim_patch, params.scale)) 
             self.train_images_in, self.train_images_gt = \
                 shuffle(self.train_images_in, self.train_images_gt)
-            self.num_train_images_names = len(self.train_images_in)
+            self.num_train_images = len(self.train_images_in)
             self.dim_patch_in = params.dim_patch // params.scale
             self.dim_patch_gt = params.dim_patch
             self.index_train = 0 

@@ -67,7 +67,8 @@ opt = tf.group(train_op1, train_op2)
 config = tf.ConfigProto(
         device_count={'GPU': 1}
     ) 
-sess = tf.Session(config = config)
+config.gpu_options.per_process_gpu_memory_fraction = 0.15
+sess = tf.Session(config=config)
 sess.run(tf.global_variables_initializer()) 
 
 total_loss_placeholder = tf.placeholder(tf.float32, shape=[], name="total_loss")
