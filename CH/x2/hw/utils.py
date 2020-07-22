@@ -13,6 +13,7 @@ import pdb
 
 SHOW_IMAGES = False
 
+
 def my_psnr(img1, img2):
     img1 = np.float32(img1)
     img2 = np.float32(img2)
@@ -29,7 +30,8 @@ def psnr(img1, img2):
     img2 = np.uint8(img2)
     
     return psnr_sk(img1, img2)
-    
+
+
 def ssim(img1, img2):
     if img1.shape[2] == 1:
         return ssim_sk(np.squeeze(img1), np.squeeze(img2))
@@ -252,7 +254,7 @@ def read_all_patches_from_directory(base_dir, folder='', return_np_array=True):
 
         for index in range(0, num_images):
             image = np.load(files[index])
-            images.append(np.expand_dims(image, 3)) 
+            images.append(np.expand_dims(image, 3))
                 
     if not return_np_array:
         return images
@@ -391,4 +393,19 @@ def rotate_images(images, angle):
         rotated_images[index, :, :, 0] = rotate(image, angle)
         
     return rotated_images
-    
+
+
+def process_image(image, is_ch=False):
+    image = np.float64(image)
+    image = np.clip(image, params.MIN_VALUE, params.MAX_VALUE)
+    if not is_ch:
+        image -= params.MIN_VALUE
+    image /= (params.MAX_VALUE - params.MIN_VALUE)
+    return image
+
+def process_image_gt(image, is_ch=False):
+    image = np.float64(image)
+    image = np.clip(image, params.MIN_VALUE, params.MAX_VALUE)
+    if not is_ch:
+        image -= params.MIN_VALUE
+    return image

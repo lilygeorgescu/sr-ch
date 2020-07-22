@@ -44,14 +44,28 @@ def compute_performance_indeces(test_images_gt, test_images, interpolation_metho
                         # 'INTER_CUBIC': cv.INTER_CUBIC,
                         # 'INTER_LANCZOS4': cv.INTER_LANCZOS4,
                         # 'INTER_NEAREST': cv.INTER_NEAREST}
-                        
+
+
 interpolation_methods = {'INTER_LANCZOS4': cv.INTER_LANCZOS4}
 
 test_path = 'D:\\Research\\super-resolution\\datasets\\test'
 scale = 2
 test_images_gt, test_images = read_images(test_path)
+for i in range(len(test_images)):
+    test_images[i] = utils.process_image_gt(test_images[i])
+    test_images_gt[i] = utils.process_image_gt(test_images_gt[i])
 
 for interpolation_method in interpolation_methods.keys():
-    psnr, ssim = compute_performance_indeces([test_images_gt[0]], [test_images[0]], interpolation_methods[interpolation_method])
+    psnr, ssim = compute_performance_indeces(test_images_gt, test_images, interpolation_methods[interpolation_method])
     print('interpolation method %s has ssim %f psnr %f' % (interpolation_method, ssim, psnr))
-    
+
+# interpolation method INTER_LANCZOS4 has ssim 0.731972 psnr 45.543306 - with normalization
+# interpolation method INTER_LANCZOS4 has ssim 0.730074 psnr 45.536157
+# interpolation method INTER_NEAREST has ssim 0.745930 psnr 40.032056
+# interpolation method INTER_LINEAR has ssim 0.696005 psnr 42.063468
+# interpolation method INTER_CUBIC has ssim 0.735909 psnr 44.940752
+
+# epoch 2 cnn D:\Research\super-resolution\datasets\test --- psnr = 47.24636465615944 ssim = 0.7537146614974554
+# epoch 3 cnn D:\Research\super-resolution\datasets\test --- psnr = 48.15208423993577 ssim = 0.7314415282172549
+# epoch 4 cnn D:\Research\super-resolution\datasets\test --- psnr = 48.663724668959446 ssim = 0.7483125980771304
+# epoch 7 cnn D:\Research\super-resolution\datasets\test --- psnr = 48.6509703921561 ssim = 0.7494254511269222
