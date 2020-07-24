@@ -15,8 +15,8 @@ interpolation_method = cv.INTER_LANCZOS4
 num_epochs = 30
 LOSS = L1_LOSS
 learning_rate = 1e-3
-dim_patch_h = 7
-dim_patch_w = 14
+dim_patch = 14
+dim_depth = 16
 kernel_size = 5 
 image_ext = 'npy'
 folder_data = './data_ckpt/'
@@ -28,9 +28,7 @@ latest_ckpt_filename = 'latest_epoch_tested'
 MIN_VALUE = -1100
 MAX_VALUE = 2500
 MAX_INTERVAL = (MAX_VALUE - MIN_VALUE)
-# for network architecture to be the same everywhere
-import networks as nets
-network_architecture = nets.SRCNN_late_upscaling_D
+ 
 
 
 def show_params():
@@ -44,7 +42,8 @@ def show_params():
 	print('num epochs = {} '.format(num_epochs))
 	print('loss = {} '.format(LOSS))
 	print('learning rate = {} '.format(learning_rate))
-	print('dim patch = {} '.format(dim_patch)) 
+	print('dim patch = {} '.format(dim_patch))
+	print('dim depth = {} '.format(dim_depth))
 	print('kernel size = {} '.format(kernel_size))
 	print('folder data size = {} '.format(folder_data)) 
 	print('num_channels  = {} '.format(num_channels))

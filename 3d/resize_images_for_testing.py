@@ -5,15 +5,16 @@ from scipy.signal import convolve
 import pydicom
 import nrrd
 import pdb
-from utils import create_folder
+from utils import create_folder, resize_3d_image_standard
 
 folder_name = 'D:\\Research\\super-resolution\\datasets\\test'
 files_names = os.listdir(folder_name)
 resize_factor = 2
-input_folder_name = 'input_d_x%d' % resize_factor
+input_folder_name = 'input_3d_x%d' % resize_factor
 
 
 for file_name in files_names:
+    print(file_name)
     images_names = os.listdir(os.path.join(folder_name, file_name, 'original'))
 
     folder_in = os.path.join(folder_name, file_name, input_folder_name)
@@ -27,13 +28,13 @@ for file_name in files_names:
         image = np.load(os.path.join(folder_name, file_name, 'original', image_name))
         images.append(image)
 
+    # now D x H x W
     images = np.array(images)
-    # from D x H x W -> H x W x D
-    images = np.transpose(images, [1, 2, 0])
-    # now H x W x D
-    for i in range(images.shape[0]):
-        image = images[i, :, :]
-        create_folder(os.path.join(folder_name, file_name, 'original_d'))
-        np.save(os.path.join(folder_name, file_name, 'original_d', '%05d.npy' % i), image)
-        in_image = cv.resize(image, None, fx=1 / resize_factor, fy=1)
-        np.save(os.path.join(folder_in, '%05d.npy' % i), in_image)
+    d, h, w = images.shape
+    input_images = resize_3d_image_standard(images, int(d // resize_factor), int(h // resize_factor), int(w // resize_factor))
+
+    create_folder(os.path.join(folder_name, file_name, 'original_3d'))
+    np.save(os.path.join(folder_name, file_name, 'original_3d', '%dx' % resize_factor, '3d_image.npy'), images)
+
+    create_folder(os.path.join(folder_name, file_name, 'input_3d'))
+    np.save(os.path.join(folder_name, file_name, 'input_3d', '%dx' % resize_factor, '3d_image.npy'), input_images)

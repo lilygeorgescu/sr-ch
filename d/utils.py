@@ -58,3 +58,9 @@ def process_image(image, is_ch=False):
         image -= MIN_VALUE
     image /= (MAX_VALUE - MIN_VALUE)
     return image
+
+
+def create_folder(folder_name):
+    if not os.path.exists(folder_name):
+       os.makedirs(folder_name)
+       print('directory created: {} '.format(folder_name))

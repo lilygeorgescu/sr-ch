@@ -8,7 +8,7 @@ import pdb
 
 folder_name = 'D:\\Research\\super-resolution\\datasets\\test'
 files_names = os.listdir(folder_name)
-resize_factor = 2
+resize_factor = 4
 input_folder_name = 'input_x%d' % resize_factor
 
 

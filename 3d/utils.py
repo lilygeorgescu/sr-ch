@@ -24,7 +24,7 @@ def my_psnr(img1, img2):
     return 20 * math.log10(PIXEL_MAX / math.sqrt(mse))
 
 
-def psnr(img1, img2): 
+def psnr(img1, img2):
     return my_psnr(img1, img2)
     img1 = np.uint8(img1)
     img2 = np.uint8(img2)
@@ -118,14 +118,11 @@ def get_output_directory_name(folder_name=params.folder_name):
     return os.path.join('output-images', folder_name, str(params.scale)) + 'x'
 
 
-def create_folders(folder_name): 
+def create_folder(folder_name):
     directory_name = get_output_directory_name(folder_name)
     if not os.path.exists(directory_name):
        os.makedirs(directory_name)
-       print('directory created: {} '.format(directory_name)) 
-    else:
-       print('directory {} exists '.format(directory_name))
-
+       print('directory created: {} '.format(directory_name))
 
 def read_all_directory_images_from_directory_test(directory_path, add_to_path=None):
     '''
@@ -135,7 +132,7 @@ def read_all_directory_images_from_directory_test(directory_path, add_to_path=No
     if not os.path.exists(directory_path):
         print('Error!! Folder base name does not exit')
     folder_images = []
-    folder_names = os.listdir(directory_path)
+
     for folder_name in folder_names:      
         images = []
         
@@ -159,9 +156,9 @@ def read_all_directory_images_from_directory_test(directory_path, add_to_path=No
             if SHOW_IMAGES:
                 cv.imshow('image', image)
                 cv.waitKey(0) 
-        folder_images.append(np.array(images, 'float64'))
+        folder_images.append(np.array(images, 'float32'))
         
-    return folder_images
+    return folder_images, folder_names
     
 def read_all_directory_images_from_directory(directory_path):
     '''
@@ -244,7 +241,6 @@ def read_all_patches_from_directory(base_dir, folder='', return_np_array=True):
         
     images = None 
     folder_names = os.listdir(base_dir)
-    folder_names = [folder_names[0]]
     for folder_name in folder_names:      
         
         images_path = os.path.join(base_dir, folder_name, folder, '*' + params.image_ext)  
@@ -296,11 +292,11 @@ def resize_height_width_3d_image_standard(images, new_heigth, new_width, interpo
         images is a nd-array of size (num_images, new_heigth, new_width, num_channels) and this function resize every image from the input.
     '''
     num_images = images.shape[0] 
-    num_channels = images.shape[-1]
-    resized_images = np.zeros((num_images, new_heigth, new_width, num_channels), 'float32')
+    num_channels = 1 # images.shape[-1]
+    resized_images = np.zeros((num_images, new_heigth, new_width, num_channels))
  
     for index in range(num_images):
-        image = images[index, :, :, :]
+        image = images[index, :, :]
         if num_channels == 1:
             resized_images[index, :, :, 0] = cv.resize(image, (new_width, new_heigth), interpolation = interpolation_method)
         else:
@@ -355,7 +351,7 @@ def resize_depth_3d_image_standard(images, new_depth, height, width, interpolati
      
     return resized_3d_images
     
-def resize_3d_image_standard(images, new_depth, new_height, new_width, interpolation_method = cv.INTER_LINEAR): 
+def resize_3d_image_standard(images, new_depth, new_height, new_width, interpolation_method = cv.INTER_LINEAR):
      
     resized_images = resize_height_width_3d_image_standard(images, new_height, new_width, interpolation_method)
     resized_3d_images = resize_depth_3d_image_standard(resized_images, new_depth, new_height, new_width, interpolation_method)
@@ -386,6 +382,7 @@ def flip_images(images):
         flipped_images[index, :, :, 0] = cv.flip(image, 1)
         
     return flipped_images
+
     
 def rotate_images(images, angle):
     num_images = images.shape[0]   
@@ -412,53 +409,3 @@ def process_image_gt(image, is_ch=False):
     if not is_ch:
         image -= params.MIN_VALUE
     return image
-
-
-def read_all_directory_images_from_directory_test_depth(directory_path, add_to_path=None, list_idx=None):
-    '''
-        This function reads the images from the directory_path (walk in every dir and read images).
-        The output is list of nd-array (num_images, height, width, channels).
-    '''
-    if not os.path.exists(directory_path):
-        print('Error!! Folder base name does not exit')
-    folder_images = []
-    folder_names = os.listdir(directory_path)
-
-    idx_to_read = [[] for i in range(len(folder_names))]
-    j = -1
-    for folder_name in folder_names:
-        j += 1
-        images = []
-
-        if add_to_path is None:
-            images_path = os.path.join(directory_path, folder_name, '*' + params.image_ext)
-        else:
-            images_path = os.path.join(directory_path, folder_name, add_to_path, '*' + params.image_ext)
-
-        files = glob.glob(images_path)
-        num_images = len(files)
-        print('There are {} images in {}'.format(num_images, images_path))
-        for index in range(0, num_images):
-
-            image = np.load(files[index])
-
-            if image.max() == 0 and list_idx is None:
-                continue
-
-            if list_idx is None:
-                idx_to_read[j].append(index)
-            else:
-                if index not in list_idx[j]:
-                    continue
-
-            images.append(np.expand_dims(image, 2))
-            if (SHOW_IMAGES):
-                cv.imshow('image', image)
-                cv.waitKey(0)
-
-        folder_images.append(np.array(images, 'float32'))
-
-    if list_idx is None:
-        return folder_images, idx_to_read
-    else:
-        return folder_images

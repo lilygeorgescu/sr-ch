@@ -29,8 +29,6 @@ MIN_VALUE = -1100
 MAX_VALUE = 2500
 MAX_INTERVAL = (MAX_VALUE - MIN_VALUE)
 # for network architecture to be the same everywhere
-import networks as nets
-network_architecture = nets.SRCNN_late_upscaling_D
 
 
 def show_params():
@@ -44,7 +42,6 @@ def show_params():
 	print('num epochs = {} '.format(num_epochs))
 	print('loss = {} '.format(LOSS))
 	print('learning rate = {} '.format(learning_rate))
-	print('dim patch = {} '.format(dim_patch)) 
 	print('kernel size = {} '.format(kernel_size))
 	print('folder data size = {} '.format(folder_data)) 
 	print('num_channels  = {} '.format(num_channels))
