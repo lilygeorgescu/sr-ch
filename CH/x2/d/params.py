@@ -25,6 +25,10 @@ num_channels = 1
 tf_version = 1.02
 ckpt_name = 'model.ckpt'
 latest_ckpt_filename = 'latest_epoch_tested'
+MIN_VALUE = -1100
+MAX_VALUE = 2500
+MAX_INTERVAL = (MAX_VALUE - MIN_VALUE)
+
 
 # for network architecture to be the same everywhere
 import networks as nets
@@ -42,7 +46,7 @@ def show_params():
 	print('num epochs = {} '.format(num_epochs))
 	print('loss = {} '.format(LOSS))
 	print('learning rate = {} '.format(learning_rate))
-	print('dim patch = {} '.format(dim_patch)) 
+	# print('dim patch = {} '.format(dim_patch)) 
 	print('kernel size = {} '.format(kernel_size))
 	print('folder data size = {} '.format(folder_data)) 
 	print('num_channels  = {} '.format(num_channels))

@@ -6,9 +6,9 @@ import os
 OUTPUT_PATH = '/media/usb/igeorgescu/super-resolution/ct_train'
 MIN_VALUE = -1100
 MAX_VALUE = 2500
-dim_patch = 14
-stride = 13
-resize_factor = 2
+dim_patch = 28
+stride = 27
+resize_factor = 4
 input_folder_name = 'input_%d_%d' % (dim_patch, resize_factor)
 gt_folder_name = 'gt_%d_%d' % (dim_patch, resize_factor)
 
