@@ -7,10 +7,10 @@ import pdb
 OUTPUT_PATH = '/media/usb/igeorgescu/super-resolution/ct_train'
 MIN_VALUE = -1100
 MAX_VALUE = 2500
-dim_patch_w = 14
+dim_patch_w = 28
 dim_patch_h = 7
-stride = 13
-resize_factor = 2
+stride = 27
+resize_factor = 4
 input_folder_name = 'input_%d_%d_%d' % (dim_patch_w, dim_patch_h, resize_factor)
 gt_folder_name = 'gt_%d_%d_%d' % (dim_patch_w, dim_patch_h, resize_factor)
 

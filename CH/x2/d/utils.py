@@ -252,7 +252,7 @@ def read_all_patches_from_directory(base_dir, folder='', return_np_array=True):
         files = glob.glob(images_path)
         num_images = len(files)
         files = shuffle(files, random_state=12)
-        num_images = max(1, int(0.1 * num_images))
+        num_images = max(1, int(0.3 * num_images))
         files = files[:num_images]
         print('There are {} images in {}'.format(num_images, images_path))
         # read the first image to get the size of the images
