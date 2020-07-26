@@ -10,6 +10,8 @@ def resize(downscaled_image, original_image, interpolation_method):
                                                      new_width=original_image.shape[2],
                                                      interpolation_method=interpolation_method)
     
+    standard_resize = np.int16(standard_resize)
+    original_image = np.int16(original_image)
     ssim_standard, psnr_standard = utils.compute_ssim_psnr_batch(standard_resize, original_image)
     return ssim_standard, psnr_standard 
      
@@ -33,6 +35,7 @@ def read_images(test_path):
 
     return test_images_gt, test_images    
 
+
 test_path = 'D:\\Research\\super-resolution\\datasets\\test'
 scale_factor = 2
 test_images_gt, test_images = read_images(test_path)
@@ -50,7 +53,20 @@ for interpolation_method in interpolation_methods.keys():
     psnr, ssim = compute_performance_indeces(test_images_gt, test_images, interpolation_methods[interpolation_method])
     print('interpolation method %s has ssim %f psnr %f' % (interpolation_method, ssim, psnr))
 
-# interpolation method INTER_LANCZOS4 has ssim 0.636653 psnr 42.062030
+# interpolation method INTER_LANCZOS4 has ssim 0.636653 psnr 42.062030 
 # interpolation method INTER_CUBIC has ssim 0.643121 psnr 41.696603
 # interpolation method INTER_LINEAR has ssim 0.598780 psnr 39.259366
 # interpolation method INTER_NEAREST has ssim 0.642384 psnr 37.348054
+
+
+# maximum 300 images
+# interpolation method INTER_LANCZOS4 has ssim 0.644535 psnr 41.202878
+
+# interpolation method INTER_LANCZOS4 has ssim 0.997355 psnr 41.200593
+# interpolation method INTER_CUBIC has ssim 0.997397 psnr 40.912336
+# interpolation method INTER_LINEAR has ssim 0.997192 psnr 38.833328
+# interpolation method INTER_NEAREST has ssim 0.996795 psnr 37.324835
+
+
+# cnn D:\Research\super-resolution\datasets\test --- psnr = 40.80114423996991 ssim = 0.9970527294766559
+# cnn D:\Research\super-resolution\datasets\test --- psnr = 40.798898330419654 ssim = 0.9970525375139278

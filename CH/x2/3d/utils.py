@@ -32,7 +32,7 @@ def psnr(img1, img2):
     return psnr_sk(img1, img2)
 
 
-def ssim(img1, img2):
+def ssim(img1, img2): 
     if img1.shape[2] == 1:
         return ssim_sk(np.squeeze(img1), np.squeeze(img2))
     return ssim_sk(img1, img2)
@@ -244,6 +244,12 @@ def read_3d_images_from_directory_test(directory_path, add_to_path=None, image_n
         image_3d = np.load(os.path.join(directory_path, folder_name,  add_to_path, image_name))
         if not is_test:
             image_3d = np.expand_dims(image_3d, axis=3)
+        print(image_3d.shape)
+        if is_test:
+            image_3d = image_3d[:150]
+        else:
+            image_3d = image_3d[:300]
+        print(image_3d.shape)
         folder_images.append(image_3d)
     return folder_images
 

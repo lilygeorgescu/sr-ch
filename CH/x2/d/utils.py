@@ -461,8 +461,8 @@ def read_all_directory_images_from_directory_test_depth(directory_path, add_to_p
             if (SHOW_IMAGES):
                 cv.imshow('image', image)
                 cv.waitKey(0)
-
-        folder_images.append(np.array(images, 'float32'))
+        images = np.array(images, 'float32')
+        folder_images.append(images[:200])
 
     if list_idx is None:
         return folder_images, idx_to_read
