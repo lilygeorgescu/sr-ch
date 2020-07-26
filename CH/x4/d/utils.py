@@ -7,6 +7,7 @@ import glob
 import numpy as np
 from skimage.measure import compare_ssim as ssim_sk 
 from skimage.measure import compare_psnr as psnr_sk 
+from sklearn.utils import shuffle
 
 import math 
 import pdb
@@ -244,12 +245,15 @@ def read_all_patches_from_directory(base_dir, folder='', return_np_array=True):
         
     images = None 
     folder_names = os.listdir(base_dir)
-    folder_names = [folder_names[0]]
+    folder_names.remove('01')
     for folder_name in folder_names:      
         
         images_path = os.path.join(base_dir, folder_name, folder, '*' + params.image_ext)  
         files = glob.glob(images_path)
         num_images = len(files)
+        files = shuffle(files, random_state=12)
+        num_images = max(1, int(0.3 * num_images))
+        files = files[:num_images]
         print('There are {} images in {}'.format(num_images, images_path))
         # read the first image to get the size of the images
 
@@ -259,6 +263,8 @@ def read_all_patches_from_directory(base_dir, folder='', return_np_array=True):
             if images is None:
                 images = image
             else:
+                if len(image) == 0:
+                    continue
                 images = np.concatenate((images, image), axis=0)
 
     return images
@@ -455,8 +461,8 @@ def read_all_directory_images_from_directory_test_depth(directory_path, add_to_p
             if (SHOW_IMAGES):
                 cv.imshow('image', image)
                 cv.waitKey(0)
-
-        folder_images.append(np.array(images, 'float32'))
+        images = np.array(images, 'float32')
+        folder_images.append(images[:200])
 
     if list_idx is None:
         return folder_images, idx_to_read

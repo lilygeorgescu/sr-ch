@@ -15,7 +15,7 @@ class DataReader:
         self.SHOW_IMAGES = SHOW_IMAGES        
         if is_training:
             self.train_images_in = utils.read_all_patches_from_directory(train_path,
-                                                                         'input_%d_%d_%d' % (params.im_patch_w,
+                                                                         'input_%d_%d_%d' % (params.dim_patch_w,
                                                                                              params.dim_patch_h,
                                                                                              params.scale))
             self.train_images_gt = utils.read_all_patches_from_directory(train_path,

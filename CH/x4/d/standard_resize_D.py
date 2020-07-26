@@ -8,7 +8,9 @@ import numpy as np
 def resize(downscaled_image, original_image, interpolation_method): 
     
     standard_resize = utils.resize_height_width_3d_image_standard(downscaled_image, int(downscaled_image.shape[1]), int(original_image.shape[2]), interpolation_method=interpolation_method)
-
+    
+    standard_resize = np.int16(standard_resize)
+    
     ssim_standard, psnr_standard = utils.compute_ssim_psnr_batch(standard_resize, original_image)
 
     return ssim_standard, psnr_standard 
@@ -50,7 +52,7 @@ test_images_gt, test_images = read_images(test_path)
 
 for i in range(len(test_images)):
     test_images[i] = utils.process_image_gt(test_images[i])
-    test_images_gt[i] = utils.process_image_gt(test_images_gt[i])
+    test_images_gt[i] = np.int16(utils.process_image_gt(test_images_gt[i]))
 
 for interpolation_method in interpolation_methods.keys():
     psnr, ssim = compute_performance_indeces(test_images_gt, test_images, interpolation_methods[interpolation_method])
@@ -61,3 +63,16 @@ for interpolation_method in interpolation_methods.keys():
 # interpolation method INTER_CUBIC has ssim 0.779637 psnr 40.386321
 # interpolation method INTER_LANCZOS4 has ssim 0.776177 psnr 40.417771
 # interpolation method INTER_NEAREST has ssim 0.748987 psnr 38.219267
+
+# only 200 images
+# interpolation method INTER_LINEAR has ssim 0.765367 psnr 42.654237
+# interpolation method INTER_CUBIC has ssim 0.783579 psnr 43.346798
+# interpolation method INTER_LANCZOS4 has ssim 0.780883 psnr 43.370962
+# interpolation method INTER_NEAREST has ssim 0.755139 psnr 40.960190
+
+# epoch 2 cnn D:\Research\super-resolution\datasets\test --- psnr = 42.18894417566856 ssim = 0.5545928152963565
+# epoch 3 cnn D:\Research\super-resolution\datasets\test --- psnr = 43.02141657158047 ssim = 0.7716466596210669
+# epoch 8 cnn D:\Research\super-resolution\datasets\test --- psnr = 44.25283611521931 ssim = 0.7487121732866311
+# epoch 13 cnn D:\Research\super-resolution\datasets\test --- psnr = 45.09157188725168 ssim = 0.7528350801127718
+# epoch 14 cnn D:\Research\super-resolution\datasets\test --- psnr = 44.608375728687484 ssim = 0.5681245345565314
+# epoch 18 cnn D:\Research\super-resolution\datasets\test --- psnr = 45.69158402657238 ssim = 0.792154583611225

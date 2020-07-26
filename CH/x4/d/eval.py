@@ -32,8 +32,8 @@ def run_network(downscaled_image, checkpoint):
         cnn_output = []
         for image in downscaled_image: 
             cnn_output.append(sess.run(output, feed_dict={input: [image]})[0])
-    
-        cnn_output = np.array(cnn_output)   
+
+        cnn_output = np.array(cnn_output, np.float32)
         cnn_output = np.round(cnn_output * params.MAX_INTERVAL)
         return cnn_output    
 
@@ -42,8 +42,10 @@ def predict(downscaled_image, original_image, checkpoint):
 
     cnn_output = run_network(downscaled_image, checkpoint)
     print(cnn_output.shape, original_image.shape)
+    cnn_output = cnn_output[:, :, :original_image.shape[2], :]
+    original_image = original_image[:, :, :cnn_output.shape[2], :]
     ssim_cnn, psnr_cnn = utils.compute_ssim_psnr_batch(cnn_output, original_image)
-
+    print(ssim_cnn, psnr_cnn)
     return ssim_cnn, psnr_cnn
 
 
@@ -66,9 +68,6 @@ def compute_performance_indeces(test_path, test_images_gt, test_images, checkpoi
     psnr_cnn_sum = 0
  
     for index in range(len(test_images_gt)): 
-    
-        if test_images_gt[index][0].shape[1] % 2 == 1 and test_path.find('train') != -1:
-            continue # an image has odd size
             
         ssim_cnn, psnr_cnn = predict(test_images[index], test_images_gt[index], checkpoint)
         tf.reset_default_graph()
@@ -91,9 +90,9 @@ def compute_performance_indeces(test_path, test_images_gt, test_images, checkpoi
             merged_ = sess.run(merged)
             writer.add_summary(merged_, epoch)
 
+
 scale = 2
 test_path = 'D:\\Research\\super-resolution\\datasets\\test'
-scale = 2
 test_images_gt, test_images = read_images(test_path)
 
 for i in range(len(test_images)):
@@ -104,13 +103,13 @@ for i in range(len(test_images)):
 
 # checkpoint = os.path.join(params.folder_data, 'model.ckpt%d' % 6) 
 
-# checkpoint = tf.train.latest_checkpoint(params.folder_data)  
-# compute_performance_indeces(path_used, test_images_gt, test_images, checkpoint, add_to_summary=False)
+checkpoint = tf.train.latest_checkpoint(params.folder_data)
+compute_performance_indeces(test_path, test_images_gt, test_images, checkpoint, add_to_summary=False)
 # exit()
 # compute_performance_indeces(eval_path, eval_images, eval_images_gt, checkpoint)  
 
 
-for i in range(9, 10):
-    checkpoint = os.path.join(params.folder_data, 'model.ckpt%d' % i) 
-    compute_performance_indeces(path_used, test_images_gt, test_images, checkpoint) 
+# for i in range(9, 10):
+#     checkpoint = os.path.join(params.folder_data, 'model.ckpt%d' % i)
+#     compute_performance_indeces(test_path, test_images_gt, test_images, checkpoint)
  
